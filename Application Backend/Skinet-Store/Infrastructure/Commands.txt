@@ -1,0 +1,1 @@
+﻿update-database -Project Infrastructure -StartupProject Skinet-Store
