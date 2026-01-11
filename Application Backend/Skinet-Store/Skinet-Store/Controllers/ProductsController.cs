@@ -10,18 +10,11 @@ namespace Skinet_Store.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductsController(ILogger<ProductsController> logger,
+                                    IProductRepository productRepository) : ControllerBase
     {
-        private readonly ILogger<ProductsController> _logger;
-        private readonly IProductRepository _productRepository;
-
-        public ProductsController(ILogger<ProductsController> logger,
-                                   IProductRepository productRepository)
-        {
-            _logger = logger;
-            _productRepository = productRepository;
-        }
-
+        private readonly ILogger<ProductsController> _logger = logger;
+        private readonly IProductRepository _productRepository = productRepository;
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromQuery] string? filterText)
