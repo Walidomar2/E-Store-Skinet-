@@ -41,9 +41,8 @@ namespace Skinet_Store.Controllers
             var product = productDto.ToEntity();
 
             await _productRepository.AddProductAsync(product);
-            var result = await _productRepository.SaveChangesAsync();
 
-            if (!result)
+            if (!await _productRepository.SaveChangesAsync())
                 return BadRequest("Failed to create product");
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product.ToDto());
@@ -58,9 +57,8 @@ namespace Skinet_Store.Controllers
                 return NotFound();
 
             _productRepository.DeleteProductAsync(product);
-            var result = await _productRepository.SaveChangesAsync();
 
-            if (!result)
+            if (!await _productRepository.SaveChangesAsync())
                 return BadRequest("Failed to delete product");
 
             return NoContent();
@@ -76,9 +74,8 @@ namespace Skinet_Store.Controllers
 
             var updatedProduct = productDto.ToEntity();
             _productRepository.UpdateProductAsync(updatedProduct);
-            var result = await _productRepository.SaveChangesAsync();
 
-            if (!result)
+            if (!await _productRepository.SaveChangesAsync())
                 return BadRequest("Failed to update product");
 
             return NoContent();
