@@ -33,5 +33,20 @@ namespace Skinet_Store.Extensions
                 Type = createProductDto.Type
             };
         }
+
+        public static Product ToEntity(this UpdateProductDto createProductDto)
+        {
+            return new Product
+            {
+                Id = createProductDto.Id,
+                Name = createProductDto.Name,
+                Description = createProductDto.Description,
+                Brand = createProductDto.Brand,
+                PictureUrl = createProductDto.PictureUrl,
+                Price = createProductDto.Price,
+                QuantityInStock = createProductDto.QuantityInStock,
+                Type = createProductDto.Type
+            };
+        }
     }
 }

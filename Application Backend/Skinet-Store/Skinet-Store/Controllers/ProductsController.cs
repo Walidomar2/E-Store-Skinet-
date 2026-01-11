@@ -1,4 +1,5 @@
 using Core.Entities;
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,23 +12,21 @@ namespace Skinet_Store.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly ApplicationContext _context;
         private readonly ILogger<ProductsController> _logger;
+        private readonly IProductRepository _productRepository;
 
         public ProductsController(ILogger<ProductsController> logger,
-                                    ApplicationContext context)
+                                   IProductRepository productRepository)
         {
             _logger = logger;
-            _context = context;
+            _productRepository = productRepository;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromQuery] string? filterText)
         {
-            var products = await _context.Products
-                .Select(p => p.ToDto())
-                .ToListAsync();
+            var products = await _productRepository.GetAllProductsAsync(filterText);
 
             return Ok(products);
         }
@@ -35,7 +34,7 @@ namespace Skinet_Store.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<ProductDto>> GetProduct([FromRoute]Guid id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(id);
 
             if (product is null)
                 return NotFound();
@@ -48,21 +47,47 @@ namespace Skinet_Store.Controllers
         {
             var product = productDto.ToEntity();
 
-            await _context.Products.AddAsync(product);
-            await _context.SaveChangesAsync();
+            await _productRepository.AddProductAsync(product);
+            var result = await _productRepository.SaveChangesAsync();
+
+            if (!result)
+                return BadRequest("Failed to create product");
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product.ToDto());
         }
 
         [HttpDelete("{id:Guid}")]
-        public async Task<IActionResult> DeleteProduct([FromRoute]Guid id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(id);
 
             if (product is null)
                 return NotFound();
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+
+            _productRepository.DeleteProductAsync(product);
+            var result = await _productRepository.SaveChangesAsync();
+
+            if (!result)
+                return BadRequest("Failed to delete product");
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDto productDto)
+        {
+            var isProductExist = await _productRepository.ProductExists(productDto.Id);
+
+            if (!isProductExist)
+                return NotFound();
+
+            var updatedProduct = productDto.ToEntity();
+            _productRepository.UpdateProductAsync(updatedProduct);
+            var result = await _productRepository.SaveChangesAsync();
+
+            if (!result)
+                return BadRequest("Failed to update product");
+
             return NoContent();
         }
 
