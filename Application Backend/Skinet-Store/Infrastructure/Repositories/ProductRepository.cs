@@ -24,7 +24,7 @@ namespace Infrastructure.Repositories
             _context.Products.Remove(product);
         }
 
-        public async Task<IReadOnlyList<Product>> GetAllProductsAsync(string? filterText)
+        public async Task<IReadOnlyList<Product>> GetAllProductsAsync(string? filterText, List<string>? brands, List<string>? types)
         {
             var query = _context.Products.AsQueryable();
 
@@ -33,6 +33,16 @@ namespace Infrastructure.Repositories
                 query = query.Where(p => p.Name.Contains(filterText) || 
                                     p.Description.Contains(filterText) || 
                                     p.Brand.Contains(filterText));
+            }
+
+            if (brands is not null && brands.Any())
+            {
+                query = query.Where(p => brands.Contains(p.Brand));
+            }
+
+            if (types is not null && types.Any())
+            {
+                query = query.Where(p => types.Contains(p.Type));
             }
 
             var products = await query.ToListAsync();

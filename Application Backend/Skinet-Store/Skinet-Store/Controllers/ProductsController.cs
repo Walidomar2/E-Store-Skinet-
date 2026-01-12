@@ -17,9 +17,9 @@ namespace Skinet_Store.Controllers
         private readonly IProductRepository _productRepository = productRepository;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromQuery] string? filterText)
+        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromQuery] GetAllProductsDto input)
         {
-            var products = await _productRepository.GetAllProductsAsync(filterText);
+            var products = await _productRepository.GetAllProductsAsync(input.FilterText, input.Brands, input.Types);
 
             return Ok(products);
         }
@@ -82,17 +82,17 @@ namespace Skinet_Store.Controllers
         }
 
         [HttpGet("brands")]
-        public async Task<ActionResult<IEnumerable<string>>> GetBrands()
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
             var brands =  await _productRepository.GetBrandsAsyns();
             return Ok(brands);
         }
 
         [HttpGet("types")]
-        public async Task<ActionResult<IEnumerable<string>>> GetTypes()
+        public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
         {
             var types = await _productRepository.GetTypesAsyns();
             return Ok(types);
-        }
+        } 
     }
 }
