@@ -11,5 +11,7 @@ namespace Core.Interfaces
         void DeleteProductAsync(Product product);
         Task<bool> ProductExists(Guid id);
         Task<bool> SaveChangesAsync();
+        Task<IReadOnlyList<string>> GetBrandsAsyns();
+        Task<IReadOnlyList<string>> GetTypesAsyns();
     }
 }

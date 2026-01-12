@@ -40,11 +40,27 @@ namespace Infrastructure.Repositories
             return products;
         }
 
+        public async Task<IReadOnlyList<string>> GetBrandsAsyns()
+        {
+            return await _context.Products
+                                 .Select(p => p.Brand)
+                                 .Distinct()
+                                 .ToListAsync();
+        }
+
         public async Task<Product?> GetProductByIdAsync(Guid id)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
                 
             return product;
+        }
+
+        public async Task<IReadOnlyList<string>> GetTypesAsyns()
+        {
+            return await _context.Products
+                                .Select(p => p.Type)
+                                .Distinct()
+                                .ToListAsync();
         }
 
         public async Task<bool> ProductExists(Guid id)

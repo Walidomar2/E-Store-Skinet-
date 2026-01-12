@@ -81,5 +81,18 @@ namespace Skinet_Store.Controllers
             return NoContent();
         }
 
+        [HttpGet("brands")]
+        public async Task<ActionResult<IEnumerable<string>>> GetBrands()
+        {
+            var brands =  await _productRepository.GetBrandsAsyns();
+            return Ok(brands);
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IEnumerable<string>>> GetTypes()
+        {
+            var types = await _productRepository.GetTypesAsyns();
+            return Ok(types);
+        }
     }
 }
