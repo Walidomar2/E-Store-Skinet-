@@ -3,6 +3,7 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Skinet_Store.DTOs;
 using Skinet_Store.DTOs.Product;
 using Skinet_Store.Extensions;
 
@@ -17,11 +18,18 @@ namespace Skinet_Store.Controllers
         private readonly IProductRepository _productRepository = productRepository;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductDto>>> GetProducts([FromQuery] GetAllProductsDto input)
+        public async Task<ActionResult<PagedResultDto<ProductDto>>> GetProducts([FromQuery] GetAllProductsDto input)
         {
-            var products = await _productRepository.GetAllProductsAsync(input.FilterText, input.Brands, input.Types);
+            var products = await _productRepository.GetAllProductsAsync(input.FilterText, input.Brands, input.Types, 
+                                                                            input.SkipCount, input.MaxResultCount, input.Sorting);
 
-            return Ok(products);
+            var productDtos = products.items.Select(p => p.ToDto()).ToList();
+
+            return Ok(new PagedResultDto<ProductDto>
+            {
+                Items = productDtos,
+                TotalCount = products.count
+            });
         }
 
         [HttpGet("{id:Guid}")]

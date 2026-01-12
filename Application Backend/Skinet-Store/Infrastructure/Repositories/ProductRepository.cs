@@ -24,7 +24,8 @@ namespace Infrastructure.Repositories
             _context.Products.Remove(product);
         }
 
-        public async Task<IReadOnlyList<Product>> GetAllProductsAsync(string? filterText, List<string>? brands, List<string>? types)
+        public async Task<(IReadOnlyList<Product> items, int count)> GetAllProductsAsync(string? filterText, List<string>? brands, List<string>? types, 
+                                                                        int skipCount, int maxResultCount, string? sorting)
         {
             var query = _context.Products.AsQueryable();
 
@@ -45,9 +46,25 @@ namespace Infrastructure.Repositories
                 query = query.Where(p => types.Contains(p.Type));
             }
 
-            var products = await query.ToListAsync();
+            if (!string.IsNullOrEmpty(sorting))
+            {
+                query = sorting.ToLower() switch
+                {
+                    "name" => query.OrderBy(p => p.Name),
+                    "name_desc" => query.OrderByDescending(p => p.Name),
+                    "price" => query.OrderBy(p => p.Price),
+                    "price_desc" => query.OrderByDescending(p => p.Price),
+                    _ => query.OrderBy(p => p.Name)
+                };
+            }
 
-            return products;
+
+            var count = await query.CountAsync();
+            var products = await query
+                                .Skip(skipCount)
+                                .Take(maxResultCount)
+                                .ToListAsync();
+            return (products, count);
         }
 
         public async Task<IReadOnlyList<string>> GetBrandsAsyns()

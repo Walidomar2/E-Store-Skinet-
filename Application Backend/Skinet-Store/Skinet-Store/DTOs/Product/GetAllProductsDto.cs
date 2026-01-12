@@ -1,6 +1,6 @@
 ﻿namespace Skinet_Store.DTOs.Product
 {
-    public class GetAllProductsDto
+    public class GetAllProductsDto : PagedRequestDto
     {
         public string? FilterText { get; set; }
         public List<string>? Brands { get; set; }
