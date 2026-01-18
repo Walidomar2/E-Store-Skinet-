@@ -24,15 +24,15 @@ namespace Infrastructure.Repositories
             _context.Products.Remove(product);
         }
 
-        public async Task<(IReadOnlyList<Product> items, int count)> GetAllProductsAsync(string? filterText, List<string>? brands, List<string>? types, 
+        public async Task<(IReadOnlyList<Product> items, int count)> GetAllProductsAsync(string? filterText, List<string>? brands, List<string>? types,
                                                                         int skipCount, int maxResultCount, string? sorting)
         {
             var query = _context.Products.AsQueryable();
 
             if (!string.IsNullOrEmpty(filterText))
             {
-                query = query.Where(p => p.Name.Contains(filterText) || 
-                                    p.Description.Contains(filterText) || 
+                query = query.Where(p => p.Name.Contains(filterText) ||
+                                    p.Description.Contains(filterText) ||
                                     p.Brand.Contains(filterText));
             }
 
@@ -46,18 +46,12 @@ namespace Infrastructure.Repositories
                 query = query.Where(p => types.Contains(p.Type));
             }
 
-            if (!string.IsNullOrEmpty(sorting))
+            query = sorting switch
             {
-                query = sorting.ToLower() switch
-                {
-                    "name" => query.OrderBy(p => p.Name),
-                    "name_desc" => query.OrderByDescending(p => p.Name),
-                    "price" => query.OrderBy(p => p.Price),
-                    "price_desc" => query.OrderByDescending(p => p.Price),
-                    _ => query.OrderBy(p => p.Name)
-                };
-            }
-
+                "price_asc" => query.OrderBy(p => p.Price),
+                "price_desc" => query.OrderByDescending(p => p.Price),
+                _ => query.OrderBy(p => p.Name)
+            };
 
             var count = await query.CountAsync();
             var products = await query
@@ -78,7 +72,7 @@ namespace Infrastructure.Repositories
         public async Task<Product?> GetProductByIdAsync(Guid id)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
-                
+
             return product;
         }
 
@@ -97,7 +91,7 @@ namespace Infrastructure.Repositories
 
         public async Task<bool> SaveChangesAsync()
         {
-           var count = await _context.SaveChangesAsync();
+            var count = await _context.SaveChangesAsync();
 
             return count > 0;
         }
