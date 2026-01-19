@@ -1,9 +1,5 @@
-using Core.Entities;
 using Core.Interfaces;
-using Core.Specifications;
-using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Skinet_Store.DTOs;
 using Skinet_Store.DTOs.Product;
 using Skinet_Store.Extensions;
@@ -13,18 +9,16 @@ namespace Skinet_Store.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class ProductsController(ILogger<ProductsController> logger,
-                                    IGenericRepository<Product> repo) : ControllerBase
+                                    IUnitOfWork repo) : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger = logger;
-        private readonly IGenericRepository<Product> _repo = repo;
+        private readonly IUnitOfWork _repo = repo;
 
         [HttpGet]
         public async Task<ActionResult<PagedResultDto<ProductDto>>> GetProducts([FromQuery] GetAllProductsDto input)
         {
-            var spec = new ProductSpecification(brand: input.Brand, type: input.Type);
-
-            //var products = await _repo.ListAllAsync(spec);
-            var products = await _repo.ListAsync(spec);
+            var products = await _repo.Products.GetAllProductsAsync(filterText: input.FilterText,
+            brands: input.Brands, types: input.Types, skipCount: input.SkipCount, maxResultCount: input.MaxResultCount, sorting: input.Sorting);
 
             var productDtos = products.items.Select(p => p.ToDto()).ToList();
 
@@ -38,7 +32,7 @@ namespace Skinet_Store.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<ProductDto>> GetProduct([FromRoute] Guid id)
         {
-            var product = await _repo.GetByIdAsync(id);
+            var product = await _repo.Products.GetProductByIdAsync(id);
 
             if (product is null)
                 return NotFound();
@@ -51,9 +45,9 @@ namespace Skinet_Store.Controllers
         {
             var product = productDto.ToEntity();
 
-            _repo.Add(product);
+            await _repo.Products.AddProductAsync(product);
 
-            if (!await _repo.SaveAllAsync())
+            if (!await _repo.CommitAsync())
                 return BadRequest("Failed to create product");
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product.ToDto());
@@ -62,14 +56,14 @@ namespace Skinet_Store.Controllers
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> DeleteProduct([FromRoute] Guid id)
         {
-            var product = await _repo.GetByIdAsync(id);
+            var product = await _repo.Products.GetProductByIdAsync(id);
 
             if (product is null)
                 return NotFound();
 
-            _repo.Remove(product);
+            _repo.Products.DeleteProductAsync(product);
 
-            if (!await _repo.SaveAllAsync())
+            if (!await _repo.CommitAsync())
                 return BadRequest("Failed to delete product");
 
             return NoContent();
@@ -78,33 +72,32 @@ namespace Skinet_Store.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductDto productDto)
         {
-            var isProductExist = _repo.Exists(productDto.Id);
+            var isProductExist = await _repo.Products.ProductExists(productDto.Id);
 
             if (!isProductExist)
                 return NotFound();
 
             var updatedProduct = productDto.ToEntity();
-            _repo.Update(updatedProduct);
+            _repo.Products.UpdateProductAsync(updatedProduct);
 
-            if (!await _repo.SaveAllAsync())
+            if (!await _repo.CommitAsync())
                 return BadRequest("Failed to update product");
-
 
             return NoContent();
         }
 
-        // [HttpGet("brands")]
-        // public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
-        // {
-        //     var brands = await _productRepository.GetBrandsAsyns();
-        //     return Ok(brands);
-        // }
+        [HttpGet("brands")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
+        {
+            var brands = await _repo.Products.GetBrandsAsyns();
+            return Ok(brands);
+        }
 
-        // [HttpGet("types")]
-        // public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
-        // {
-        //     var types = await _productRepository.GetTypesAsyns();
-        //     return Ok(types);
-        // }
+        [HttpGet("types")]
+        public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
+        {
+            var types = await _repo.Products.GetTypesAsyns();
+            return Ok(types);
+        }
     }
 }
