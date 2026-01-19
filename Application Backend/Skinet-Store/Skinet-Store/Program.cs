@@ -20,7 +20,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 //Repositories Injection
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
