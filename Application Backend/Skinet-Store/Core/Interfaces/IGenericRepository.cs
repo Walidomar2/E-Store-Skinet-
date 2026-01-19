@@ -11,5 +11,7 @@ namespace Core.Interfaces
         void Update(T entity);
         Task<bool> SaveAllAsync();
         bool Exists(Guid id);
+        Task<T?> GetEntityWithSpec(ISpecification<T> spec);
+        Task<(IReadOnlyList<T> items, int count)> ListAsync(ISpecification<T> spec);
     }
 }

@@ -1,5 +1,6 @@
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,10 @@ namespace Skinet_Store.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResultDto<ProductDto>>> GetProducts([FromQuery] GetAllProductsDto input)
         {
-            var products = await _repo.ListAllAsync();
+            var spec = new ProductSpecification(brand: input.Brand, type: input.Type);
+
+            //var products = await _repo.ListAllAsync(spec);
+            var products = await _repo.ListAsync(spec);
 
             var productDtos = products.items.Select(p => p.ToDto()).ToList();
 
@@ -84,6 +88,7 @@ namespace Skinet_Store.Controllers
 
             if (!await _repo.SaveAllAsync())
                 return BadRequest("Failed to update product");
+
 
             return NoContent();
         }
