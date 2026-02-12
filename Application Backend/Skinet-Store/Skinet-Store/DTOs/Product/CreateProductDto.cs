@@ -15,7 +15,7 @@ namespace Skinet_Store.DTOs.Product
         [Required] public string Type { get; set; } = string.Empty;
         [Required] public string Brand { get; set; } = string.Empty;
 
-        [Range(1, int.MaxValue, ErrorMessage = "QuantityInStock must be at least 1")]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity in stock must be at least 1")]
         [Required] public int QuantityInStock { get; set; }
 
     }
