@@ -1,0 +1,11 @@
+{
+    "header": {
+        "home": "Home",
+        "shop": "Shop",
+        "contact": "Contact",
+        "login": "Login",
+        "register": "Register",
+        "cart": "Cart",
+        "language": "Language"
+    }
+}

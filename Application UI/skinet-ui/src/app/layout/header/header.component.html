@@ -1,10 +1,11 @@
 <header class="shadow-md p-3 w-full">
     <div class="flex align-middle items-center justify-between max-w-screen-2xl mx-auto">
         <img src="assets/logo.png" alt="app logo" class="max-h-16">
+        <!-- force re-render when translations load -->
         <nav class="flex gap-3 my-2 uppercase text-xl">
-            <a>Home</a>
-            <a>Shop</a>
-            <a>Contact</a>
+            <a>{{ 'header.home' | translate }}</a>
+            <a>{{ 'header.shop' | translate }}</a>
+            <a>{{ 'header.contact' | translate }}</a>
         </nav>
 
         <div class="flex gap-3 align-middle">
@@ -12,9 +13,24 @@
                 <mat-icon>shopping_cart</mat-icon>
             </a>
 
-            <button mat-stroked-button>Login</button>
-            <button mat-stroked-button>Register</button>
-            
+            <button mat-stroked-button>{{ 'header.login' | translate }}</button>
+            <button mat-stroked-button>{{ 'header.register' | translate }}</button>
+
+            <!-- Language Switcher Dropdown -->
+            <button mat-icon-button [matMenuTriggerFor]="languageMenu"
+                [attr.aria-label]="'header.language' | translate">
+                <mat-icon>language</mat-icon>
+            </button>
+
+            <mat-menu #languageMenu="matMenu">
+                <button mat-menu-item (click)="changeLanguage('en')" [class.font-bold]="currentLanguage() === 'en'">
+                    <span>English</span>
+                </button>
+                <button mat-menu-item (click)="changeLanguage('ar')" [class.font-bold]="currentLanguage() === 'ar'">
+                    <span>العربية</span>
+                </button>
+            </mat-menu>
+
         </div>
     </div>
 </header>

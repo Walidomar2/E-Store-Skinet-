@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from "./layout/header/header.component";
 
 @Component({
@@ -10,4 +9,7 @@ import { HeaderComponent } from "./layout/header/header.component";
 })
 export class AppComponent {
   title = 'skinet-ui';
+
+  // TranslationService is injected where needed (TranslatePipe/header)
 }
+
