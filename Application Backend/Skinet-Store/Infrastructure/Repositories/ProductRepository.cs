@@ -23,29 +23,31 @@ namespace Infrastructure.Repositories
                                                                         int skipCount, int maxResultCount, string? sorting)
         {
             var query = _context.Products.AsQueryable();
+            query = query.Include(p => p.Brand);
 
             if (!string.IsNullOrEmpty(filterText))
             {
-                query = query.Where(p => p.Name.Contains(filterText) ||
-                                    p.Description.Contains(filterText) ||
-                                    p.Brand.Contains(filterText));
+                query = query.Where(p => p.NameEn.Contains(filterText) ||
+                                    p.NameAr.Contains(filterText) ||
+                                    p.DescriptionAr.Contains(filterText) ||
+                                    p.DescriptionEn.Contains(filterText));
             }
 
             if (brands is not null && brands.Any())
             {
-                query = query.Where(p => brands.Contains(p.Brand));
+                query = query.Where(p => p.Brand != null && (brands.Contains(p.Brand.NameAr) || brands.Contains(p.Brand.NameEn)));
             }
 
             if (types is not null && types.Any())
             {
-                query = query.Where(p => types.Contains(p.Type));
+                query = query.Where(p => types.Contains(p.TypeAr) || types.Contains(p.TypeEn));
             }
 
             query = sorting switch
             {
                 "price_asc" => query.OrderBy(p => p.Price),
                 "price_desc" => query.OrderByDescending(p => p.Price),
-                _ => query.OrderBy(p => p.Name)
+                _ => query.OrderBy(p => p.NameEn)
             };
 
             var count = await query.CountAsync();
@@ -56,7 +58,7 @@ namespace Infrastructure.Repositories
             return (products, count);
         }
 
-        public async Task<IReadOnlyList<string>> GetBrandsAsyns()
+        public async Task<IReadOnlyList<Brand?>> GetBrandsAsyns()
         {
             return await _context.Products
                                  .Select(p => p.Brand)
@@ -71,12 +73,15 @@ namespace Infrastructure.Repositories
             return product;
         }
 
-        public async Task<IReadOnlyList<string>> GetTypesAsyns()
+        public async Task<IReadOnlyList<(string TypeEn, string TypeAr)>> GetTypesAsync()
         {
-            return await _context.Products
-                                .Select(p => p.Type)
-                                .Distinct()
-                                .ToListAsync();
+            var pairs = await _context.Products
+                .Select(p => new { p.TypeEn, p.TypeAr })
+                .Distinct()
+                .OrderBy(x => x.TypeEn)
+                .ToListAsync();
+
+            return pairs.Select(x => (x.TypeEn, x.TypeAr)).ToList();
         }
 
         public async Task<bool> ProductExists(Guid id)

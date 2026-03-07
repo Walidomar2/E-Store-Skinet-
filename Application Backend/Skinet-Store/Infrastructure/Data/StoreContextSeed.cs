@@ -12,6 +12,17 @@ namespace Infrastructure.Data
     {
         public static async Task SeedAsync(ApplicationContext context)
         {
+            if (!context.Brands.Any())
+            {
+                var brandsData = File.ReadAllText("../Infrastructure/Data/SeedData/brands.json");
+                var brands = JsonSerializer.Deserialize<List<Brand>>(brandsData);
+
+                if (brands is null) return;
+
+                context.Brands.AddRange(brands);
+                await context.SaveChangesAsync();
+            }
+
             if (!context.Products.Any())
             {
                 var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");

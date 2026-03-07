@@ -1,4 +1,6 @@
-﻿namespace Skinet_Store.DTOs.Product
+﻿using Core.Entities;
+
+namespace Skinet_Store.DTOs.Product
 {
     public class ProductDto
     {
@@ -8,7 +10,7 @@
         public decimal Price { get; set; }
         public string PictureUrl { get; set; } = string.Empty;
         public string Type { get; set; } = string.Empty;
-        public string Brand { get; set; } = string.Empty;
+        public string? Brand { get; set; }
         public int QuantityInStock { get; set; }
     }
 }

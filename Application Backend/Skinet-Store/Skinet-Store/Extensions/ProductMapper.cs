@@ -5,18 +5,18 @@ namespace Skinet_Store.Extensions
 {
     public static class ProductMapper
     {
-        public static ProductDto ToDto(this Product product)
+        public static ProductDto ToDto(this Product product, bool isArabic)
         {
             return new ProductDto
             {
                 Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                Brand = product.Brand,
+                Name = isArabic? product.NameAr : product.NameEn,
+                Description = isArabic ? product.DescriptionAr : product.DescriptionEn,
+                Brand = isArabic? product.Brand?.NameAr : product.Brand?.NameEn,
                 PictureUrl = product.PictureUrl,
                 Price = product.Price,
                 QuantityInStock = product.QuantityInStock,
-                Type = product.Type
+                Type = isArabic? product.TypeAr : product.TypeEn,
             };
         }
 
@@ -24,13 +24,16 @@ namespace Skinet_Store.Extensions
         {
             return new Product
             {
-                Name = createProductDto.Name,
-                Description = createProductDto.Description,
-                Brand = createProductDto.Brand,
+                NameEn = createProductDto.NameEn,
+                NameAr = createProductDto.NameAr,
+                DescriptionEn = createProductDto.DescriptionEn,
+                DescriptionAr = createProductDto.DescriptionAr,
+                BrandId = createProductDto.BrandId,
                 PictureUrl = createProductDto.PictureUrl,
                 Price = createProductDto.Price,
                 QuantityInStock = createProductDto.QuantityInStock,
-                Type = createProductDto.Type
+                TypeEn = createProductDto.TypeEn,
+                TypeAr = createProductDto.TypeAr
             };
         }
 
@@ -39,13 +42,16 @@ namespace Skinet_Store.Extensions
             return new Product
             {
                 Id = createProductDto.Id,
-                Name = createProductDto.Name,
-                Description = createProductDto.Description,
-                Brand = createProductDto.Brand,
+                NameEn = createProductDto.NameEn,
+                NameAr = createProductDto.NameAr,
+                DescriptionEn = createProductDto.DescriptionEn,
+                DescriptionAr = createProductDto.DescriptionAr,
+                BrandId = createProductDto.BrandId,
                 PictureUrl = createProductDto.PictureUrl,
                 Price = createProductDto.Price,
                 QuantityInStock = createProductDto.QuantityInStock,
-                Type = createProductDto.Type
+                TypeEn = createProductDto.TypeEn,
+                TypeAr = createProductDto.TypeAr
             };
         }
     }
