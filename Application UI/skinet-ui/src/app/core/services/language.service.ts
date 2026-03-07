@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export type Language = 'en' | 'ar';
 
@@ -9,6 +10,8 @@ export class LanguageService {
     private readonly currentLanguageSignal = signal<Language>(this.getInitialLanguage());
 
     readonly currentLanguage = this.currentLanguageSignal.asReadonly();
+    private readonly languageSubject = new BehaviorSubject<Language>(this.currentLanguage());
+    readonly language$ = this.languageSubject.asObservable();
 
     private getInitialLanguage(): Language {
         // Check localStorage first
@@ -28,7 +31,16 @@ export class LanguageService {
 
     setLanguage(language: Language): void {
         this.currentLanguageSignal.set(language);
+        this.languageSubject.next(language);
         localStorage.setItem('app-language', language);
+        document.documentElement.lang = language;
+        document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+    }
+
+    applySavedLanguage(): void {
+        const language = (localStorage.getItem('app-language') as Language) || 'en';
+        this.currentLanguageSignal.set(language);
+        this.languageSubject.next(language);
         document.documentElement.lang = language;
         document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
     }

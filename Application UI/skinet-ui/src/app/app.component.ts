@@ -1,5 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { HeaderComponent } from "./layout/header/header.component";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { LanguageService } from './core/services/language.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +10,38 @@ import { HeaderComponent } from "./layout/header/header.component";
   styleUrl: './app.component.css',
   imports: [HeaderComponent]
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'skinet-ui';
+  baseUrl = "http://localhost:5209/api/";
+  products: any[] = [];
+  private langSub?: Subscription;
 
-  // TranslationService is injected where needed (TranslatePipe/header)
+  constructor(private http: HttpClient,
+    private languageService: LanguageService) { }
+
+  ngOnInit() {
+    this.languageService.applySavedLanguage();
+
+    // Initial fetch
+    this.fetchProducts();
+
+    // Re-fetch whenever language changes
+    this.langSub = this.languageService.language$.subscribe(() => {
+      this.fetchProducts();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.langSub?.unsubscribe();
+  }
+
+  private fetchProducts(): void {
+    this.http.get<any>(this.baseUrl + "products").subscribe({
+      next: response => this.products = response.items,
+      error: error => console.log(error),
+      complete: () => console.log("Request completed")
+    });
+  }
+
 }
 

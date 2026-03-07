@@ -29,7 +29,9 @@ namespace Skinet_Store.Controllers
             return Ok(new PagedResultDto<ProductDto>
             {
                 Items = productDtos,
-                TotalCount = products.count
+                TotalCount = products.count,
+                PageIndex = input.SkipCount + 1,
+                PageSize = input.MaxResultCount
             });
         }
 
