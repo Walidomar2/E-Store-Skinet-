@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { HeaderComponent } from "./layout/header/header.component";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { LanguageService } from './core/services/language.service';
+import { LanguageService } from './core/services/language/language.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -21,11 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.languageService.applySavedLanguage();
-
-    // Initial fetch
     this.fetchProducts();
 
-    // Re-fetch whenever language changes
     this.langSub = this.languageService.language$.subscribe(() => {
       this.fetchProducts();
     });

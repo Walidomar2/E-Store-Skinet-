@@ -4,8 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
-import { TranslatePipe } from '../../core/services/translation.service';
-import { LanguageService, type Language } from '../../core/services/language.service';
+import { TranslatePipe } from '../../core/services/language/translation.service';
+import { LanguageService, type Language } from '../../core/services/language/language.service';
 
 @Component({
   selector: 'app-header',
