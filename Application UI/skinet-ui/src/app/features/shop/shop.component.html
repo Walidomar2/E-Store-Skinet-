@@ -1,0 +1,11 @@
+<div class="grid grid-cols-5 gap-4">
+    @for (product of products; track product.id; let i = $index) {
+        <mat-card
+            appearance="raised"
+            class="product-card"
+            [style.animation-delay]="(i * 120) + 'ms'"
+        >
+            <img mat-card-image [src]="product.pictureUrl" [alt]="product.name">
+        </mat-card>
+    }
+</div>
