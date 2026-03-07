@@ -23,7 +23,7 @@ export class ShopService {
     return this.http.get<PagedResultDto<ProductDto>>(this.baseUrl + "products", { params: httpParams });
   }
 
-  getProduct(id: number) {
+  getProductById(id: string) {
     return this.http.get<ProductDto>(this.baseUrl + "products/" + id);
   }
 }

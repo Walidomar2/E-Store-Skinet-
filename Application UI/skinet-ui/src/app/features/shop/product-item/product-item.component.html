@@ -1,1 +1,16 @@
-<p>product-item works!</p>
+@if(product) {
+<mat-card appearance="raised">
+  <img mat-card-image [src]="product.pictureUrl" [alt]="product.name">
+  <mat-card-content class="mt-2">
+    <h2 class="text-sm font-smibold uppercase">{{product.name}}</h2>
+    <p class="font-light">${{product.price | currency}}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-stroked-button class="w-full">
+      <mat-icon>add_shopping_cart</mat-icon>
+      {{ 'product.addToCart' | translate }}
+    </button>
+  </mat-card-actions>
+
+</mat-card>
+}

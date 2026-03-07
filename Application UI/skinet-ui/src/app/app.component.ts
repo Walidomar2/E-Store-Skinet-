@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { HeaderComponent } from "./layout/header/header.component";
 import { ShopComponent } from "./features/shop/shop.component";
 
@@ -6,7 +6,7 @@ import { ShopComponent } from "./features/shop/shop.component";
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  imports: [HeaderComponent, ShopComponent]
+  imports: [HeaderComponent, ShopComponent],
 })
 export class AppComponent {
   title = 'skinet-ui';

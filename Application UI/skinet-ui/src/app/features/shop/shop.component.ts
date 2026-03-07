@@ -1,17 +1,17 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GetAllProductsDto, ProductDto } from '../../core/modals/shop.modals';
 import { PagedResultDto } from '../../core/modals/general.modals';
 import { Subscription } from 'rxjs';
 import { LanguageService } from '../../core/services/language/language.service';
 import { ShopService } from '../../core/services/shop/shop.service';
-import { MatCard } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProductItemComponent } from "./product-item/product-item.component";
 
 @Component({
   selector: 'app-shop',
   imports: [
-    MatCard,
-    MatProgressSpinnerModule 
+    MatProgressSpinnerModule,
+    ProductItemComponent
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
@@ -53,7 +53,4 @@ export class ShopComponent implements OnInit, OnDestroy {
       complete: () => { this.isLoading = false; }
     });
   }
-
-
-
 }
