@@ -5,11 +5,13 @@ import { Subscription } from 'rxjs';
 import { LanguageService } from '../../core/services/language/language.service';
 import { ShopService } from '../../core/services/shop/shop.service';
 import { MatCard } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-shop',
   imports: [
-    MatCard
+    MatCard,
+    MatProgressSpinnerModule 
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',

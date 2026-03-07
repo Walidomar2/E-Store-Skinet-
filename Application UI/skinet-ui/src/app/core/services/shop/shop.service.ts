@@ -22,4 +22,8 @@ export class ShopService {
 
     return this.http.get<PagedResultDto<ProductDto>>(this.baseUrl + "products", { params: httpParams });
   }
+
+  getProduct(id: number) {
+    return this.http.get<ProductDto>(this.baseUrl + "products/" + id);
+  }
 }
