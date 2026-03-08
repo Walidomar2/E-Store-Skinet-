@@ -11,6 +11,13 @@
     "product": {
         "addToCart": "Add to Cart",
         "details": "Details",
-        "price": "Price"
+        "price": "Price",
+        "brand": "Brand",
+        "type": "Type",
+        "filters": "Filters",
+        "noProducts": "No products",
+        "applyFilters": "Apply Filters",
+        "brands": "Brands",
+        "types": "Types"
     }
 }

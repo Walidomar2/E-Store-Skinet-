@@ -11,7 +11,13 @@
     "product": {
         "addToCart": "أضف إلى السلة",
         "details": "التفاصيل",
-        "price": "السعر"
+        "price": "السعر",
+        "brand": "الماركة",
+        "type": "النوع",
+        "filters": "الفلاتر",
+        "noProducts": "لا توجد منتجات",
+        "applyFilters": "تطبيق الفلاتر",
+        "brands": "الماركات",
+        "types": "الأنواع"
     }
-
 }
