@@ -35,12 +35,25 @@ namespace Infrastructure.Repositories
 
             if (brands is not null && brands.Any())
             {
-                query = query.Where(p => p.Brand != null && (brands.Contains(p.Brand.NameAr) || brands.Contains(p.Brand.NameEn)));
+                var normalizedBrands = brands
+                        .Where(b => !string.IsNullOrWhiteSpace(b))
+                        .Select(b => b.Trim().ToLower())
+                        .ToList();
+
+                query = query.Where(p => p.Brand != null &&
+                                (normalizedBrands.Contains(p.Brand.NameAr.ToLower()) ||
+                                 normalizedBrands.Contains(p.Brand.NameEn.ToLower())));
             }
 
             if (types is not null && types.Any())
             {
-                query = query.Where(p => types.Contains(p.TypeAr) || types.Contains(p.TypeEn));
+                var normalizedTypes = types
+                                        .Where(t => !string.IsNullOrWhiteSpace(t))
+                                        .Select(t => t.Trim().ToLower())
+                                        .ToList();
+
+                query = query.Where(p => types.Contains(p.TypeAr.ToLower()) || 
+                                        types.Contains(p.TypeEn.ToLower()));
             }
 
             query = sorting switch

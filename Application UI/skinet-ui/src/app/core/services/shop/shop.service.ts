@@ -14,10 +14,21 @@ export class ShopService {
   getProducts(params: GetAllProductsDto) {
     let httpParams = new HttpParams();
     if (params.filterText) httpParams = httpParams.set('filterText', params.filterText);
-    if (params.brands) httpParams = httpParams.set('brands', params.brands.join(','));
-    if (params.types) httpParams = httpParams.set('types', params.types.join(','));
-    if (params.skipCount) httpParams = httpParams.set('pageNumber', params.skipCount);
-    if (params.maxResultCount) httpParams = httpParams.set('pageSize', params.maxResultCount);
+
+    if (params.brands?.length) {
+      params.brands.forEach(brand => {
+        httpParams = httpParams.append('brands', brand);
+      });
+    }
+
+    if (params.types?.length) {
+      params.types.forEach(type => {
+        httpParams = httpParams.append('types', type);
+      });
+    }
+
+    if (params.skipCount) httpParams = httpParams.set('skipCount', params.skipCount);
+    if (params.maxResultCount) httpParams = httpParams.set('maxResultCount', params.maxResultCount);
     if (params.sorting) httpParams = httpParams.set('sorting', params.sorting);
 
     return this.http.get<PagedResultDto<ProductDto>>(this.baseUrl + "products", { params: httpParams });

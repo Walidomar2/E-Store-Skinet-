@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ShopService } from '../../../core/services/shop/shop.service';
 import { LanguageService } from '../../../core/services/language/language.service';
 import { Subscription } from 'rxjs';
@@ -6,6 +6,9 @@ import { TranslatePipe } from "../../../core/services/language/translation.servi
 import { MatDivider } from '@angular/material/divider';
 import { MatSelectionList, MatListOption } from '@angular/material/list';
 import { MatButton } from '@angular/material/button';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
@@ -14,62 +17,60 @@ import { MatButton } from '@angular/material/button';
     MatDivider,
     MatSelectionList,
     MatListOption,
-    MatButton
+    MatButton,
+    FormsModule
   ],
   templateUrl: './filters-dialog.component.html',
   styleUrl: './filters-dialog.component.css',
 })
-export class FiltersDialogComponent {
+export class FiltersDialogComponent implements OnInit {
   brands: string[] = [];
   types: string[] = [];
-  isLoading = false;
-  langSub?: Subscription;
+  data = Inject(MAT_DIALOG_DATA);
+
+  selectedBrands: string[] = this.data.selectedBrands || [];
+  selectedTypes: string[] = this.data.selectedTypes || [];
 
   constructor(private shopService: ShopService,
-    private languageService: LanguageService) { }
+    private languageService: LanguageService,
+    private dialogService: MatDialogRef<FiltersDialogComponent>) { }
 
-  onInit() {
-    this.languageService.applySavedLanguage();
+  ngOnInit() {
     this.initData();
   }
 
-  ngOnDestroy(): void {
-    this.langSub?.unsubscribe();
-  }
-
-
   getBrands() {
-    this.isLoading = true;
     this.shopService.getBrands().subscribe({
       next: (response) => {
         this.brands = response;
-        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching brands:', error);
-        this.isLoading = false;
       }
     });
   }
 
   getTypes() {
-    this.isLoading = true;
     this.shopService.getTypes().subscribe({
       next: (response) => {
         this.types = response;
-        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching types:', error);
-        this.isLoading = false;
       }
     });
   }
 
-
   initData() {
     this.getBrands();
     this.getTypes();
+  }
+
+  applyFilters() {
+    this.dialogService.close({
+      selectedBrands: this.selectedBrands,
+      selectedTypes: this.selectedTypes
+    });
   }
 
 }

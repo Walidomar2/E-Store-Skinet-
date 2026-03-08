@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GetAllProductsDto, ProductDto } from '../../core/modals/shop.modals';
 import { PagedResultDto } from '../../core/modals/general.modals';
-import { Subscription } from 'rxjs';
+import { finalize, Subscription } from 'rxjs';
 import { LanguageService } from '../../core/services/language/language.service';
 import { ShopService } from '../../core/services/shop/shop.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -32,6 +32,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   filters = {} as GetAllProductsDto;
   brands: string[] = [];
   types: string[] = [];
+  selectedBrands: string[] = [];
+  selectedTypes: string[] = [];
 
   constructor(private shopService: ShopService,
     private languageService: LanguageService,
@@ -39,7 +41,6 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.languageService.applySavedLanguage();
-    this.initailizeData();
 
     this.langSub = this.languageService.language$.subscribe(() => {
       this.initailizeData();
@@ -52,56 +53,39 @@ export class ShopComponent implements OnInit, OnDestroy {
 
   loadProducts(): void {
     this.isLoading = true;
-    this.shopService.getProducts(this.filters).subscribe({
-      next: (response) => {
-        this.data = response;
-        this.products = response.items;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching products:', error);
-      },
-      complete: () => { this.isLoading = false; }
-    });
-  }
-
-  getBrands() {
-    this.isLoading = true;
-    this.shopService.getBrands().subscribe({
-      next: (response) => {
-        this.brands = response;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching brands:', error);
-        this.isLoading = false;
-      }
-    });
-  }
-
-  getTypes() {
-    this.isLoading = true;
-    this.shopService.getTypes().subscribe({
-      next: (response) => {
-        this.types = response;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error fetching types:', error);
-        this.isLoading = false;
-      }
-    });
+    this.shopService.getProducts(this.filters)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (response) => {
+          this.data = response;
+          this.products = response.items;
+        },
+        error: (error) => {
+          console.error('Error fetching products:', error);
+        }
+      });
   }
 
   initailizeData() {
     this.loadProducts();
-    this.getBrands();
-    this.getTypes();
   }
 
   openFilterDialog() {
     const dialogRef = this.dialogService.open(FiltersDialogComponent, {
       minWidth: '500px',
+      data: {
+        selectedBrands: this.selectedBrands,
+        selectedTypes: this.selectedTypes
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.selectedBrands = result.selectedBrands;
+        this.selectedTypes = result.selectedTypes;
+        this.filters.brands = this.selectedBrands;
+        this.filters.types = this.selectedTypes;
+        this.loadProducts();
+      }
     });
   }
 

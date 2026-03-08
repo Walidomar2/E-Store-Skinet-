@@ -99,15 +99,16 @@ namespace Skinet_Store.Controllers
         }
 
         [HttpGet("brands")]
-        public async Task<ActionResult<IReadOnlyList<BrandDto>>> GetBrands()
+        public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
             var lang = HttpContext.Request.Headers["Accept-Language"].FirstOrDefault();
             var isArabic = lang?.StartsWith("ar", StringComparison.OrdinalIgnoreCase) == true;
 
             var brands = await _repo.Products.GetBrandsAsyns();
-            var brandsDto = brands.Select(b => b?.ToDto(isArabic)).ToList();
+            var brandsNames = isArabic? brands.Select(b => b.NameAr).ToList() :
+                                        brands.Select(b => b.NameEn).ToList();
 
-            return Ok(brandsDto);
+            return Ok(brandsNames);
         }
 
         [HttpGet("types")]
