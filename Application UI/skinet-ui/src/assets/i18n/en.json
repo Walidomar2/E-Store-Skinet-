@@ -18,6 +18,9 @@
         "noProducts": "No products",
         "applyFilters": "Apply Filters",
         "brands": "Brands",
-        "types": "Types"
+        "types": "Types",
+        "sorting": "Sorting",
+        "priceLowToHigh": "Price (Low to High)",
+        "priceHighToLow": "Price (High to Low)"
     }
 }

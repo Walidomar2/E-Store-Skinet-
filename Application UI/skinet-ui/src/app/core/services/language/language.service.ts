@@ -12,7 +12,7 @@ export class LanguageService {
     readonly currentLanguage = this.currentLanguageSignal.asReadonly();
     private readonly languageSubject = new BehaviorSubject<Language>(this.currentLanguage());
     readonly language$ = this.languageSubject.asObservable();
-
+    
     private getInitialLanguage(): Language {
         // Check localStorage first
         const savedLanguage = localStorage.getItem('app-language') as Language | null;
@@ -31,10 +31,10 @@ export class LanguageService {
 
     setLanguage(language: Language): void {
         this.currentLanguageSignal.set(language);
-        this.languageSubject.next(language);
         localStorage.setItem('app-language', language);
         document.documentElement.lang = language;
         document.documentElement.dir = language === 'ar' ? 'rtl' : 'ltr';
+        this.languageSubject.next(language);
     }
 
     applySavedLanguage(): void {

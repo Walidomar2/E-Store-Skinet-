@@ -18,6 +18,9 @@
         "noProducts": "لا توجد منتجات",
         "applyFilters": "تطبيق الفلاتر",
         "brands": "الماركات",
-        "types": "الأنواع"
+        "types": "الأنواع",
+        "sorting": "الترتيب",
+        "priceLowToHigh": "السعر (من الأقل إلى الأعلى)",
+        "priceHighToLow": "السعر (من الأعلى إلى الأقل)"
     }
 }

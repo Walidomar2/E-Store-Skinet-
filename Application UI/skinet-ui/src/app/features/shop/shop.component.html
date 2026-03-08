@@ -8,6 +8,11 @@
       <mat-icon>filter_list</mat-icon>
       {{ 'product.filters' | translate }}
     </button>
+
+    <button mat-stroked-button [matMenuTriggerFor]="sortMenu">
+      <mat-icon>swap_vert</mat-icon>
+      {{ 'product.sorting' | translate }}
+    </button>
   </div>
 
   <!-- Product Grid -->
@@ -20,6 +25,17 @@
   </div>
 
 </div>
+
+<!-- Sort Menu -->
+<mat-menu #sortMenu="matMenu">
+  <mat-selection-list [multiple]="false" (selectionChange)="onSortChange()">
+    @for (option of sortingOptions; track $index) {
+    <mat-list-option [value]="option.value" [selected]="selectedSort === option.value">
+      {{ option.name }}
+    </mat-list-option>
+    }
+  </mat-selection-list>
+</mat-menu>
 }
 @else {
 <div class="flex justify-center items-center h-64">

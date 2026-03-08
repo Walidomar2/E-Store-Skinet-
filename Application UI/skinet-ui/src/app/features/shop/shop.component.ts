@@ -11,6 +11,8 @@ import { FiltersDialogComponent } from './filters-dialog/filters-dialog.componen
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslatePipe } from "../../core/services/language/translation.service";
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatListOption, MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-shop',
@@ -19,7 +21,11 @@ import { TranslatePipe } from "../../core/services/language/translation.service"
     ProductItemComponent,
     MatButton,
     MatIcon,
-    TranslatePipe
+    TranslatePipe,
+    MatMenu,
+    MatSelectionList,
+    MatListOption,
+    MatMenuTrigger
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
@@ -34,6 +40,11 @@ export class ShopComponent implements OnInit, OnDestroy {
   types: string[] = [];
   selectedBrands: string[] = [];
   selectedTypes: string[] = [];
+  sortingOptions = [
+    { value: 'price_asc', name: 'Price (Low to High)' },
+    { value: 'price_desc', name: 'Price (High to Low)' }
+  ];
+  selectedSort = 'price_asc';
 
   constructor(private shopService: ShopService,
     private languageService: LanguageService,
@@ -89,4 +100,8 @@ export class ShopComponent implements OnInit, OnDestroy {
     });
   }
 
+  onSortChange() {
+    this.filters.sorting = this.selectedSort;
+    this.loadProducts();
+  }
 }
