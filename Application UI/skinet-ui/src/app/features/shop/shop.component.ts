@@ -41,8 +41,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   selectedBrands: string[] = [];
   selectedTypes: string[] = [];
   sortingOptions = [
-    { value: 'price_asc', name: 'Price (Low to High)' },
-    { value: 'price_desc', name: 'Price (High to Low)' }
+    { value: 'price_asc', name: 'product.priceLowToHigh' },
+    { value: 'price_desc', name: 'product.priceHighToLow' }
   ];
   selectedSort = 'price_asc';
 

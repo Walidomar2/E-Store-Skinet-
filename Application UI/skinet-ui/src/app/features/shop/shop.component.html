@@ -3,7 +3,7 @@
 <div class="flex flex-col gap-3">
 
   <!-- Filter Button -->
-  <div class="flex justift-end">
+  <div class="flex justift-end gap-2">
     <button mat-stroked-button (click)="openFilterDialog()">
       <mat-icon>filter_list</mat-icon>
       {{ 'product.filters' | translate }}
@@ -31,7 +31,7 @@
   <mat-selection-list [multiple]="false" (selectionChange)="onSortChange()">
     @for (option of sortingOptions; track $index) {
     <mat-list-option [value]="option.value" [selected]="selectedSort === option.value">
-      {{ option.name }}
+      {{ option.name | translate }}
     </mat-list-option>
     }
   </mat-selection-list>

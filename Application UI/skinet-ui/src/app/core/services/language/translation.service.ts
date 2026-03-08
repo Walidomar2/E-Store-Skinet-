@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform, effect, Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { signal } from '@angular/core';
 import { LanguageService } from './language.service';
 
@@ -50,6 +51,25 @@ export class TranslationService {
 
     getTranslations(): Record<string, any> {
         return this.translations();
+    }
+
+    async getTranslationForLanguage(language: string, key: string): Promise<string> {
+        const url = `/assets/i18n/${language}.json`;
+        try {
+            const data = await firstValueFrom(this.http.get<Record<string, any>>(url));
+            const keys = key.split('.');
+            let value: any = data;
+            for (const k of keys) {
+                if (value && typeof value === 'object' && k in value) {
+                    value = value[k];
+                } else {
+                    return key;
+                }
+            }
+            return typeof value === 'string' ? value : key;
+        } catch {
+            return key;
+        }
     }
 }
 
