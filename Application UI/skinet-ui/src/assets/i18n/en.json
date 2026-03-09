@@ -22,5 +22,14 @@
         "sorting": "Sorting",
         "priceLowToHigh": "Price (Low to High)",
         "priceHighToLow": "Price (High to Low)"
+    },
+    "paginator": {
+        "itemsPerPage": "Items per page",
+        "nextPage": "Next page",
+        "previousPage": "Previous page",
+        "firstPage": "First page",
+        "lastPage": "Last page",
+        "rangeLabel": "{start} - {end} of {length}",
+        "rangeEmpty": "0 of 0"
     }
 }

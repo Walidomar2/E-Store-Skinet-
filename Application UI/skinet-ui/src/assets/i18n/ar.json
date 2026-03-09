@@ -22,5 +22,14 @@
         "sorting": "الترتيب",
         "priceLowToHigh": "السعر (من الأقل إلى الأعلى)",
         "priceHighToLow": "السعر (من الأعلى إلى الأقل)"
+    },
+    "paginator": {
+        "itemsPerPage": "عدد العناصر في الصفحة",
+        "nextPage": "الصفحة التالية",
+        "previousPage": "الصفحة السابقة",
+        "firstPage": "الصفحة الأولى",
+        "lastPage": "الصفحة الأخيرة",
+        "rangeLabel": "{start} - {end} من {length}",
+        "rangeEmpty": "0 من 0"
     }
 }
