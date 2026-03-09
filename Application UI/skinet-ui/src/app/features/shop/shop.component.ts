@@ -13,6 +13,7 @@ import { MatIcon } from '@angular/material/icon';
 import { TranslatePipe } from "../../core/services/language/translation.service";
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-shop',
@@ -25,7 +26,8 @@ import { MatListOption, MatSelectionList } from '@angular/material/list';
     MatMenu,
     MatSelectionList,
     MatListOption,
-    MatMenuTrigger
+    MatMenuTrigger,
+    MatPaginator
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
@@ -45,10 +47,12 @@ export class ShopComponent implements OnInit, OnDestroy {
     { value: 'price_desc', name: 'product.priceHighToLow' }
   ];
   selectedSort = 'price_asc';
-
   constructor(private shopService: ShopService,
     private languageService: LanguageService,
-    private dialogService: MatDialog) { }
+    private dialogService: MatDialog) {
+    this.filters.skipCount = 0;
+    this.filters.maxResultCount = 10;
+  }
 
   ngOnInit() {
     this.languageService.applySavedLanguage();
@@ -104,4 +108,11 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.filters.sorting = this.selectedSort;
     this.loadProducts();
   }
+
+  onPageChange(event: PageEvent) {
+    this.filters.skipCount = event.pageIndex * event.pageSize;
+    this.filters.maxResultCount = event.pageSize;
+    this.loadProducts();
+  }
+
 }

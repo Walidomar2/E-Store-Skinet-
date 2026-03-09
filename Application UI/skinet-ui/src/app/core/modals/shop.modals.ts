@@ -7,12 +7,12 @@ export interface ProductDto {
   price: number;
   pictureUrl: string;
   type: string;
-  brand?: string | null;
+  brand?: string;
   quantityInStock: number;
 }
 
 export interface GetAllProductsDto extends PaginationParams {
   filterText?: string | null;
-  brands?: string[] | null;
-  types?: string[] | null;
+  brands?: string[];
+  types?: string[];
 }

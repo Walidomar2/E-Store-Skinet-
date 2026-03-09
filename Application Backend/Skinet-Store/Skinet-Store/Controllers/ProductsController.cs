@@ -30,7 +30,7 @@ namespace Skinet_Store.Controllers
             {
                 Items = productDtos,
                 TotalCount = products.count,
-                PageIndex = input.SkipCount + 1,
+                PageIndex = (int)Math.Floor((double)(input.SkipCount) / (input.MaxResultCount)),
                 PageSize = input.MaxResultCount
             });
         }

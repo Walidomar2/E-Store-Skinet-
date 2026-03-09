@@ -6,7 +6,7 @@
 
         public int SkipCount { get; set; } = 0;
 
-        private int _maxResultCount = 10;
+        private int _maxResultCount = int.MaxValue;
         public int MaxResultCount
         {
             get => _maxResultCount;
