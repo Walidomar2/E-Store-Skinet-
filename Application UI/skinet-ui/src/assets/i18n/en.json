@@ -21,7 +21,8 @@
         "types": "Types",
         "sorting": "Sorting",
         "priceLowToHigh": "Price (Low to High)",
-        "priceHighToLow": "Price (High to Low)"
+        "priceHighToLow": "Price (High to Low)",
+        "searchPlaceholder": "Search for products..."
     },
     "paginator": {
         "itemsPerPage": "Items per page",

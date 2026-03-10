@@ -1,19 +1,20 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { GetAllProductsDto, ProductDto } from '../../core/modals/shop.modals';
 import { PagedResultDto } from '../../core/modals/general.modals';
-import { finalize, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, Subject, Subscription } from 'rxjs';
 import { LanguageService } from '../../core/services/language/language.service';
 import { ShopService } from '../../core/services/shop/shop.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ProductItemComponent } from "./product-item/product-item.component";
 import { MatDialog } from '@angular/material/dialog';
 import { FiltersDialogComponent } from './filters-dialog/filters-dialog.component';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { TranslatePipe } from "../../core/services/language/translation.service";
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-shop',
@@ -27,7 +28,8 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
     MatSelectionList,
     MatListOption,
     MatMenuTrigger,
-    MatPaginator
+    MatPaginator,
+    FormsModule
   ],
   templateUrl: './shop.component.html',
   styleUrl: './shop.component.css',
@@ -54,16 +56,29 @@ export class ShopComponent implements OnInit, OnDestroy {
     this.filters.maxResultCount = 10;
   }
 
+  private searchSubject = new Subject<string>();
+  private searchSub?: Subscription;
+
   ngOnInit() {
     this.languageService.applySavedLanguage();
 
     this.langSub = this.languageService.language$.subscribe(() => {
       this.initailizeData();
     });
+
+    this.searchSub = this.searchSubject
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      )
+      .subscribe(() => {
+        this.onSearchChange();
+      });
   }
 
   ngOnDestroy(): void {
     this.langSub?.unsubscribe();
+    this.searchSub?.unsubscribe();
   }
 
   loadProducts(): void {
@@ -112,6 +127,15 @@ export class ShopComponent implements OnInit, OnDestroy {
   onPageChange(event: PageEvent) {
     this.filters.skipCount = event.pageIndex * event.pageSize;
     this.filters.maxResultCount = event.pageSize;
+    this.loadProducts();
+  }
+
+  onSearchInput(): void {
+    this.searchSubject.next(this.filters.filterText || '');
+  }
+
+  onSearchChange() {
+    this.filters.skipCount = 0; // Reset to first page on search
     this.loadProducts();
   }
 

@@ -21,7 +21,8 @@
         "types": "الأنواع",
         "sorting": "الترتيب",
         "priceLowToHigh": "السعر (من الأقل إلى الأعلى)",
-        "priceHighToLow": "السعر (من الأعلى إلى الأقل)"
+        "priceHighToLow": "السعر (من الأعلى إلى الأقل)",
+        "searchPlaceholder": "ابحث عن المنتجات..."
     },
     "paginator": {
         "itemsPerPage": "عدد العناصر في الصفحة",
