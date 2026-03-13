@@ -81,7 +81,8 @@ namespace Infrastructure.Repositories
 
         public async Task<Product?> GetProductByIdAsync(Guid id)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var product = await _context.Products.Include(p => p.Brand)
+                                                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return product;
         }

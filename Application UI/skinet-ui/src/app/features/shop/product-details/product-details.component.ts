@@ -14,7 +14,7 @@ import { TranslatePipe } from "../../../core/services/language/translation.servi
     CurrencyPipe,
     MatIcon,
     TranslatePipe
-],
+  ],
   templateUrl: './product-details.component.html',
   styleUrl: './product-details.component.css',
 })
@@ -46,6 +46,10 @@ export class ProductDetailsComponent {
     });
 
     this.languageService.applySavedLanguage();
+  }
+
+  ngOnDestroy(): void {
+    this.langSub?.unsubscribe();
   }
 
   private loadProductDetails(productId: string): void {
