@@ -6,6 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../core/services/language/translation.service';
 import { LanguageService, type Language } from '../../core/services/language/language.service';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +16,9 @@ import { LanguageService, type Language } from '../../core/services/language/lan
     MatButtonModule,
     MatBadgeModule,
     MatMenuModule,
-    TranslatePipe
+    TranslatePipe,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
