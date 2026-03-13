@@ -1,46 +1,70 @@
 @if (product) {
-<section class="py-8">
-    <div class="max-w-screen-2xl px-4 mx-auto">
-        <div class="grid grid-cols-2 gap-8">
-            <div class="max-w-xl mx-auto">
-                <img class="w-full" src="{{product.pictureUrl}}" alt="product image" />
+<section class="py-10">
+    <div class="max-w-6xl px-4 mx-auto">
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:items-start">
+            <!-- Product Image -->
+            <div class="relative">
+                <div class="w-full rounded-3xl overflow-hidden aspect-square shadow-lg">
+                    <img class="object-cover w-full h-full" [src]="product.pictureUrl"
+                        [alt]="product.name || 'Product image'" />
+                </div>
             </div>
 
-            <div class="mt-6 sm:mt-8 lg:mt-0">
-                <h1 class="text-2xl font-semibold text-gray-900">
-                    {{product.name}}
-                </h1>
-
-                <!-- <p>You have {{quantityInCart}} of this item in your cart</p> -->
-
-                <div class="mt-4 items-center gap-4 flex">
-                    <p class="text-3xl font-extrabold text-gray-900">
-                        {{product.price | currency}}
-                    </p>
-                </div>
-
-                <div class="flex gap-4 mt-6">
-                    <button (click)="updateCart()" mat-flat-button [disabled]="quantity === quantityInCart"
-                        class="match-input-height">
-                        <mat-icon>shopping_cart</mat-icon>
-                        {{getButtonText()}}
-                    </button>
-
-                    <mat-form-field appearance="outline" class="flex flex-row">
-                        <mat-label>Quantity</mat-label>
-                        <input matInput min="0" type="number" [(ngModel)]="quantity" type="number">
-                    </mat-form-field>
-                </div>
-
-                <mat-divider class="my-6"></mat-divider>
-
-                <p class="mt-6 text-gray-500">
-                    {{product.description}}
+            <!-- Product Details -->
+            <div class="flex flex-col justify-start">
+                <p class="mb-2 text-sm font-semibold tracking-widest text-teal-600 uppercase">
+                    {{ product.brand }}
                 </p>
 
+                <h1 class="text-3xl md:text-4xl font-bold leading-tight text-gray-900 mb-4">
+                    {{ product.name }}
+                </h1>
+
+                <p class="text-gray-600 text-sm leading-relaxed mb-8">
+                    {{ product.description }}
+                </p>
+
+                <!-- Pricing Section -->
+                <div class="mb-8">
+                    <div class="flex items-center gap-4 mb-3">
+                        <span class="text-4xl font-bold text-gray-900">
+                            {{ product.price | currency }}
+                        </span>
+                        @if (discount && discount > 0) {
+                        <span class="px-3 py-1 text-lg font-bold text-white bg-green-500 rounded-lg">
+                            {{ discount }}%
+                        </span>
+                        <span class="text-lg text-gray-400 line-through">
+                            {{ originalPrice | currency }}
+                        </span>
+                        }
+                    </div>
+                </div>
+
+                <!-- Quantity and Cart -->
+                <div class="flex items-center gap-6 mb-8">
+                    <!-- Quantity Selector -->
+                    <div class="flex items-center border border-gray-300 rounded-lg">
+                        <button (click)="decreaseQuantity()"
+                            class="px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition">
+                            <mat-icon>remove</mat-icon>
+                        </button>
+                        <span class="px-6 py-3 text-lg font-semibold text-gray-900">{{ quantity }}</span>
+                        <button (click)="increaseQuantity()"
+                            class="px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+
+                    <!-- Add to Cart Button -->
+                    <button (click)="updateCart()" [disabled]="quantity === quantityInCart"
+                        class="flex-1 h-14 px-8 text-white font-semibold text-lg bg-green-600 hover:bg-green-700 disabled:bg-gray-400 rounded-lg shadow-md transition flex items-center justify-center gap-2">
+                        <mat-icon>shopping_cart</mat-icon>
+                        {{ getButtonText() | translate }}
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </section>
-
 }

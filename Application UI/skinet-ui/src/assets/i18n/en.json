@@ -22,7 +22,8 @@
         "sorting": "Sorting",
         "priceLowToHigh": "Price (Low to High)",
         "priceHighToLow": "Price (High to Low)",
-        "searchPlaceholder": "Search for products..."
+        "searchPlaceholder": "Search for products...",
+        "updateCart": "Update Cart"
     },
     "paginator": {
         "itemsPerPage": "Items per page",

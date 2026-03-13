@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+/* Smooth transitions */
+button {
+  transition: all 0.3s ease;
+}
+
+/* Remove Material input styling for custom quantity input */
+.quantity-input {
+  border: none;
+  outline: none;
+  text-align: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.quantity-input:disabled {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+/* Image carousel container */
+.carousel-container {
+  position: relative;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+img {
+  animation: fadeIn 0.3s ease-in;
+}

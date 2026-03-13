@@ -22,7 +22,8 @@
         "sorting": "الترتيب",
         "priceLowToHigh": "السعر (من الأقل إلى الأعلى)",
         "priceHighToLow": "السعر (من الأعلى إلى الأقل)",
-        "searchPlaceholder": "ابحث عن المنتجات..."
+        "searchPlaceholder": "ابحث عن المنتجات...",
+        "updateCart": "تحديث السلة"
     },
     "paginator": {
         "itemsPerPage": "عدد العناصر في الصفحة",
