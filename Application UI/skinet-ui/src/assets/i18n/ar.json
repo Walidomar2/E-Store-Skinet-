@@ -33,5 +33,11 @@
         "lastPage": "الصفحة الأخيرة",
         "rangeLabel": "{start} - {end} من {length}",
         "rangeEmpty": "0 من 0"
+    },
+    "errors": {
+        "serverErrorTitle": "خطأ في الخادم",
+        "serverErrorSentence": "عذراً، حدث خطأ غير متوقع على الخادم. يرجى المحاولة مرة أخرى لاحقاً.",
+        "notFoundTitle": "الصفحة غير موجودة",
+        "notFoundSentence": "عذراً، الصفحة التي تبحث عنها غير موجودة."
     }
 }
