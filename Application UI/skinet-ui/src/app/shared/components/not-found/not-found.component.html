@@ -1,6 +1,14 @@
-<div class="container mt-5">
-    <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading">{{ 'errors.notFoundTitle' | translate }}</h4>
+<div id="notfound">
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>:(</h1>
+        </div>
+
+        <h2>{{ 'errors.notFoundTitle' | translate }}</h2>
         <p>{{ 'errors.notFoundSentence' | translate }}</p>
+
+        <a routerLink="/shop">
+            {{ 'errors.shopPage' | translate }}
+        </a>
     </div>
 </div>

@@ -19,16 +19,16 @@ export const routes: Routes = [
         component: ProductDetailsComponent
     },
     {
-        path: '**',
-        redirectTo: '',
-        pathMatch: 'full'
-    },
-    {
         path: 'not-found',
         component: NotFoundComponent
     },
     {
         path: 'server-error',
         component: ServerErrorComponent
+    },
+    {
+        path: '**',
+        redirectTo: '',
+        pathMatch: 'full'
     }
 ];
