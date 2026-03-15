@@ -8,13 +8,14 @@ import { CustomMatPaginatorIntl } from './core/services/language/custom-mat-pagi
 
 import { routes } from './app.routes';
 import { errorInterceptor } from './core/interceptors/error-interceptor';
+import { loadingInterceptor } from './core/interceptors/loading-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideZoneChangeDetection(),
-    provideHttpClient(withInterceptors([languageInterceptor, errorInterceptor])),
+    provideHttpClient(withInterceptors([languageInterceptor, errorInterceptor, loadingInterceptor])),
     { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
   ]
 };

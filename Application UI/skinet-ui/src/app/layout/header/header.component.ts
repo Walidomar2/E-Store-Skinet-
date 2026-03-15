@@ -7,7 +7,8 @@ import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../core/services/language/translation.service';
 import { LanguageService, type Language } from '../../core/services/language/language.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
+import { MatProgressBar } from '@angular/material/progress-bar';
+import { BusyService } from '../../core/services/busy.service';
 @Component({
   selector: 'app-header',
   imports: [
@@ -18,7 +19,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     MatMenuModule,
     TranslatePipe,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    MatProgressBar
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -26,7 +28,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class HeaderComponent {
   private readonly languageService = inject(LanguageService);
-
+  busyService = inject(BusyService);
   readonly currentLanguage = this.languageService.currentLanguage;
 
   changeLanguage(language: Language): void {

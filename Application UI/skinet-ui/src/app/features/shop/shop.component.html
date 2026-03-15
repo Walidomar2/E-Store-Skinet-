@@ -32,7 +32,8 @@
 
   </div>
 
-  @if(!isLoading){
+
+  @if(products && products.length > 0) {
   <!-- Product Grid -->
   <div class="grid grid-cols-5 gap-4">
     @for (product of products; track product.id; let i = $index) {
@@ -40,10 +41,6 @@
       <app-product-item [product]="product"></app-product-item>
     </div>
     }
-  </div>
-  }@else {
-  <div class="flex justify-center items-center h-64">
-    <mat-spinner></mat-spinner>
   </div>
   }
 

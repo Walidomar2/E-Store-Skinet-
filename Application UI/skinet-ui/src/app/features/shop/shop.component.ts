@@ -37,7 +37,6 @@ import { FormsModule } from '@angular/forms';
 export class ShopComponent implements OnInit, OnDestroy {
   data: PagedResultDto<ProductDto> | null = null;
   products: ProductDto[] = [];
-  isLoading = false;
   private langSub?: Subscription;
   filters = {} as GetAllProductsDto;
   brands: string[] = [];
@@ -82,9 +81,8 @@ export class ShopComponent implements OnInit, OnDestroy {
   }
 
   loadProducts(): void {
-    this.isLoading = true;
     this.shopService.getProducts(this.filters)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe()
       .subscribe({
         next: (response) => {
           this.data = response;

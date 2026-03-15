@@ -19,7 +19,6 @@ import { TranslatePipe } from "../../../core/services/language/translation.servi
   styleUrl: './product-details.component.css',
 })
 export class ProductDetailsComponent {
-  isLoading = false;
   product: ProductDto | null = null;
   quantity = 1;
   quantityInCart = 1;
@@ -53,15 +52,12 @@ export class ProductDetailsComponent {
   }
 
   private loadProductDetails(productId: string): void {
-    this.isLoading = true;
     this.shopService.getProductById(productId).subscribe({
       next: (response) => {
         this.product = response;
-        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error fetching product details:', error);
-        this.isLoading = false;
       }
     });
   }
