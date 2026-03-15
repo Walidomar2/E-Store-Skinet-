@@ -7,13 +7,14 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { CustomMatPaginatorIntl } from './core/services/language/custom-mat-paginator-intl';
 
 import { routes } from './app.routes';
+import { errorInterceptor } from './core/interceptors/error-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideZoneChangeDetection(),
-    provideHttpClient(withInterceptors([languageInterceptor])),
+    provideHttpClient(withInterceptors([languageInterceptor, errorInterceptor])),
     { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
   ]
 };
